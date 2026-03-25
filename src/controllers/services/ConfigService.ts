@@ -1,7 +1,7 @@
 import { Config } from '../../models';
 import { getLicenseKey, getMachineId, getToken, setSessionToken } from '../../utils/auth';
 
-const BASE = (import.meta as any).env?.VITE_API_URL || '/api';
+const BASE = import.meta.env.VITE_API_URL || '/api';
 
 async function refreshToken(): Promise<void> {
   const licenseKey = getLicenseKey();
