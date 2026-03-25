@@ -20,6 +20,8 @@ export default function PresupuestoForm({ initial, onSave, onClose }: Props) {
   const today = new Date().toISOString().slice(0, 10);
 
   const [saving, setSaving] = useState(false);
+  const [ivaEnabled, setIvaEnabled] = useState((initial?.iva_pct ?? 21) > 0);
+  const [savedIvaPct, setSavedIvaPct] = useState(initial?.iva_pct || 21);
   const [form, setForm] = useState({
     numero: initial?.numero || '',
     cliente_nombre: initial?.cliente_nombre || '',
@@ -266,10 +268,32 @@ export default function PresupuestoForm({ initial, onSave, onClose }: Props) {
                     onChange={e => set('descuento_pct', Number(e.target.value))} />
                 </div>
                 <div className="form-group">
-                  <label>IVA (%)</label>
-                  <input type="number" min="0" max="100" step="0.5"
-                    value={form.iva_pct}
-                    onChange={e => set('iva_pct', Number(e.target.value))} />
+                  <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={ivaEnabled}
+                      onChange={e => {
+                        const checked = e.target.checked;
+                        setIvaEnabled(checked);
+                        if (!checked) {
+                          setSavedIvaPct(form.iva_pct || 21);
+                          set('iva_pct', 0);
+                        } else {
+                          set('iva_pct', savedIvaPct);
+                        }
+                      }}
+                    />
+                    IVA (%)
+                  </label>
+                  {ivaEnabled && (
+                    <input type="number" min="0" max="100" step="0.5"
+                      value={form.iva_pct}
+                      onChange={e => {
+                        const v = Number(e.target.value);
+                        set('iva_pct', v);
+                        setSavedIvaPct(v);
+                      }} />
+                  )}
                 </div>
               </div>
 
