@@ -82,7 +82,7 @@ export default function PresupuestoForm({ initial, onSave, onClose }: Props) {
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-overlay">
       <div className="modal" onClick={e => e.stopPropagation()}>
 
         <div className="modal-head">
